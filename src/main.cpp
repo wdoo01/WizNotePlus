@@ -14,6 +14,7 @@
 #include <QtWebEngine>
 #include <QStyleFactory>
 #include <QWebEngineSettings>
+#include <QUrl>
 
 #include <sys/stat.h>
 
@@ -159,6 +160,14 @@ int mainCore(int argc, char *argv[])
     if (app.isRunning())
     {
         app.sendMessage(WIZ_SINGLE_APPLICATION);
+	if(argc >1)
+	{
+	    QUrl url(argv[1]);
+	    if (url.scheme().toLower() == "wiz")
+	    {
+		app.sendMessage(url.toString());
+	    }
+	}
         return 0;
     }
     // 初始化Chrome内核
@@ -436,6 +445,15 @@ int mainCore(int argc, char *argv[])
     window.show();
     window.init();
 
+	if(argc >1)
+	{
+	    QUrl url(argv[1]);
+	    if (url.scheme().toLower() == "wiz")
+	    {
+		window.viewDocumentByWizKMURL( url.toString());
+	    }
+	}
+
 #ifdef Q_OS_MAC
     //start and set safari extension
     WIZUSERINFO userInfo;
@@ -456,6 +474,7 @@ int mainCore(int argc, char *argv[])
     }
 
     int ret = app.exec();
+
     if (window.isLogout()) {
         // 清理密码？
         userSettings.setPassword("");

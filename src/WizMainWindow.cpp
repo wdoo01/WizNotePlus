@@ -4058,6 +4058,11 @@ void WizMainWindow::on_application_messageAvailable(const QString& strMsg)
     {
         shiftVisableStatus();
     }
+    else 
+    {
+	viewDocumentByWizKMURL(strMsg);
+    }
+
 }
 
 void WizMainWindow::checkWizUpdate()
@@ -4240,6 +4245,9 @@ void WizMainWindow::viewDocumentByWizKMURL(const QString &strKMURL)
 
     QString strKbGUID = GetParamFromWizKMURL(strKMURL, "kbguid");
     QString strGUID = GetParamFromWizKMURL(strKMURL, "guid");
+
+    qDebug() << "KbGUID : " << strKbGUID;
+    qDebug() << "GUID : " << strGUID;
     WizDatabase& db = m_dbMgr.db(strKbGUID);
 
     WIZDOCUMENTDATA document;
@@ -4249,7 +4257,8 @@ void WizMainWindow::viewDocumentByWizKMURL(const QString &strKMURL)
         m_documents->blockSignals(true);
         m_documents->setCurrentItem(0);
         m_documents->blockSignals(false);
-        viewDocument(document, true);
+        //viewDocument(document, true);
+        viewDocument(document);
         locateDocument(document);
         activateWindow();
         raise();
